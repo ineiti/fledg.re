@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="main.css">
+  <script src="main.js"></script>
+</head>
+<body bgcolor="#2e0c22">
+
+<div id="outer">
+  <div id="quit">
+    <span class="text hidden" id="quit_text_2">
+      No fun without money, eh? You have two options:
+      <ul>
+        <li><a href="https://bitcoin.org">HODL and burn the earth</a></li>
+        <li><a href="https://avalabs.org">Try your luck with DeFi</a></li>
+      </ul>
+    </span>
+    <span class="text hidden" id="quit_text_3">
+      Ah, yes, what is a blockchain without connections to the rest of
+      the world? Be sure to come back for the fun...
+      <ul>
+        <li><a href="https://cosmos.network">Connected blockchains</a></li>
+        <li><a href="https://polkadot.network">Decentralized Interoperability</a></li>
+      </ul>
+    </span>
+    <span class="text hidden" id="quit_text_4">
+      Fun will come later. First let's do some research. Or do you have fun with
+      research?<br><br>
+      <a href="#" onclick="link_research()">I'm Feeling Lucky</a>
+    </span>
+    <span class="text hidden" id="quit_text_5">
+      Once you visited your foo bar project, come back for some fun!<br><br>
+      <a href="#" onclick="link_foobar()">Something else</a>
+    </span>
+  </div>
+  <div id="inner">
+    <div id="link1" class="link link1" onclick="link_fun()">
+      <span class="text">
+        Fun
+      </span>
+    </div>
+    <div id="link2" class="link link2" onclick="link_quit(2)">
+      <span class="text">
+        $$$
+      </span>
+    </div>
+    <div id="link3" class="link link3" onclick="link_quit(3)">
+      <span class="text">
+        Eco-system
+    </span>
+    </div>
+    <div id="link4" class="link link4" onclick="link_quit(4)">
+      <span class="text">
+        Research
+      </span>
+    </div>
+    <div id="link5" class="link link5" onclick="link_quit(5)">
+      <span class="text">
+        Foo Bar
+      </span>
+    </div>
+  </div>
+</div>
+</body>
+</html>
