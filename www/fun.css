@@ -1,0 +1,21 @@
+#agreement{
+  display: flex;
+}
+
+.space {
+  flex: 5%;
+}
+
+.column {
+  flex: 50%;
+  padding: 2%;
+}
+.column:hover{
+  background-color: #581844
+}
+
+#participate{
+}
+
+#bystander{
+}

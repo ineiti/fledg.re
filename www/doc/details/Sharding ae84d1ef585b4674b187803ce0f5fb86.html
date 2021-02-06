@@ -1,0 +1,627 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Sharding</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="ae84d1ef-585b-4674-b187-803ce0f5fb86" class="page sans"><header><h1 class="page-title">Sharding</h1></header><div class="page-body"><p id="2a679968-8014-4b14-b5b5-6b7e239902c3" class="">Sharding is currently one of the only possibilities to really scale-out a blockchain system. This section is divided in three parts:</p><ul id="7fbf963d-f9de-43a7-8c89-495e4f7dffd7" class="bulleted-list"><li>Adaptive Sharding</li></ul><ul id="63f8b7b1-1482-4f45-ad9d-f40d800dfb75" class="bulleted-list"><li>Layered Shards</li></ul><ul id="c03627c0-b521-4b07-b920-d29b36cd3e04" class="bulleted-list"><li>Inter-shard Communication</li></ul><h1 id="e660046f-9f6b-4928-b9c3-ce2c0a652fc5" class="">Adaptive Sharding</h1><p id="d08e4eac-af80-4ed4-b71d-bb317e8e0be2" class="">One possibility to scale-out is to group nodes together to build shards that each handle part of the accounts. There are multiple challenges involved here:</p><ol id="194f8a3a-c4d6-4715-a1fd-12220b51dd92" class="numbered-list" start="1"><li>For security reasons, the nodes need to be swapped between shards, else an attacker could target nodes in only one shard and take it over. But swapping nodes, adding and removing them on a regular, fast, basis has the following problems:<ol id="d8705b07-196a-4b21-8413-5f0ebd433b81" class="numbered-list" start="1"><li>When a new shard is created, the nodes must be able to catch up very fast. Catching up the Ethereum chain takes multiple days.</li></ol><ol id="92230859-7c8b-4145-b58a-c26d52e8cc34" class="numbered-list" start="2"><li>If too many nodes leave a shard, it might starve, so shards need to be able to be removed</li></ol></li></ol><ol id="d86abd12-9230-4808-ad42-95f8949f9a30" class="numbered-list" start="2"><li>When a new shard is created, accounts need to be assigned to it, else the shard is empty.</li></ol><ol id="7c4d20c3-7d5e-4fdb-8a11-a4df0e0e4840" class="numbered-list" start="3"><li>When a shard is removed because there aren&#x27;t enough nodes, the accounts need to be re-assigned back to the other shard(s)</li></ol><ol id="51a6b289-58c0-4696-b96d-4cebc8e13b0d" class="numbered-list" start="4"><li>A client needs to know which shard she has to send her transaction to</li></ol><ol id="fdeb9c6b-1640-4ec5-9c51-3f8b30afb1ae" class="numbered-list" start="5"><li>If a transaction involves more than one account, it needs to be able to send the calls to the correct shard</li></ol><h2 id="228c08ae-0dde-4603-95b1-e83352599ad6" class="">Solved problems</h2><p id="00118d48-0fc7-41ef-b4b7-b95692af381a" class="">The following problems are already solved by other parts of the system:</p><p id="b8eb1157-a8b2-4a17-b32d-46c3ed6363dc" class="">1.1.: Using <a href="../Fledger%20dc9f9b90c2b44c319d831271ce9bd976.html">multi-level forward-links</a> to produce small proofs of the latest block and using <a href="Heavy%20Transactions%20Small%20Global%20State%20cd908c100cab4e4198a2dbfbe47ef1aa.html">small global state</a> so that nodes can catch up fast</p><h2 id="8f4e01f3-180a-4582-8c81-c88465d0136b" class="">Sharding mechanisms</h2><p id="f5b0c781-083a-489b-bdc9-aa6ba763282f" class="">We make some suppositions on the list of available nodes:</p><ul id="f8b2c153-82d6-4ca7-828e-8ebd224d1ebc" class="bulleted-list"><li>Using measurements on the speed of the nodes and their uptime, the system sorts them according to their reliability. Then the most reliable nodes at the beginning of the list</li></ul><ul id="a262fc6f-784a-4725-b35f-d03cbad2fd11" class="bulleted-list"><li>The shards are arranged in a binary tree with the identity shard at the top. Each level of the tree represents a certain speed/reliability bucket. This allows the upper shards to have enough resources to follow the lower shards</li></ul><ul id="0906275c-8a5c-485e-aa17-0fd1c978782e" class="bulleted-list"><li>An account can indicate the desired speed / finality, so that low-speed accounts can be put in the outer shards where they consume less mana, and high-speed accounts are put in the inner shards, where they consume more mana</li></ul><ul id="a7864de5-ebc6-4347-9b73-4815acde4b4d" class="bulleted-list"><li>The number of nodes per shard should be 3f+1 with f being part of N. To test sharding, and supposing there are few nodes in the beginning, the system increases f with the number of nodes. The idea behind this is that supposing a certain number of byzantine (failing or churning) nodes, the higher the  number of nodes, the higher the possible of f per shard is.<ul id="f1bebbd5-0a96-449f-98bc-ff64e763d6a6" class="bulleted-list"><li>Up to (2) * (3 * 1 + 1) = 8 nodes, f = 1, which means it can create up to two shards</li></ul><ul id="bf833b5f-ba53-4d8b-addf-c0bc8d886381" class="bulleted-list"><li>Up to (2 + 4) * (3 * 2 + 1) = 42 nodes, f = 2, which means it can split the list of nodes in two: 14 nodes and 28 nodes</li></ul><ul id="eef170ee-0130-4bfe-8507-eb0b6e664b1e" class="bulleted-list"><li>Up to (2 + 4 + 8) * (3 * 3 + 1) = 140 nodes, f = 3, which means the system splits the list of nodes in three: 20 nodes, 40 nodes, 80 nodes</li></ul></li></ul><h3 id="482734dd-0c46-4fb1-8402-5ba5d5caef81" class="">Intermediate node numbers</h3><p id="f7a4cca7-932d-4ddc-aba2-a3c29c06e4eb" class="">If the number of nodes does not allow to have <em>f e N</em> with 3f+1, then the system needs to distribute the nodes in an intelligent manner:</p><ul id="b80f66b6-f96b-4762-be19-24291b5db23a" class="bulleted-list"><li>Due to churn small shards need to be avoided, else they might starve</li></ul><ul id="b7c59df9-e67a-4b67-9730-3fd8615b79f6" class="bulleted-list"><li>There needs to be some hysteresis to avoid changing total number of shards too often</li></ul><h2 id="40050531-155d-45cd-898c-d42f957ad2e7" class="">Assigning accounts to shards</h2><p id="71579cfe-5d15-4c95-9ec3-3bfa53dff197" class="">FFledger assigns account prefixes to every shard that is created. The assignment happens in such a way that the least amount of accounts need to be swapped. It uses the leftmost bits of the account-IDs to decide which shard an account should be assigned to.</p><p id="c0e4f269-6d73-4034-97c4-3a7420966f14" class="">Then the system will distribute the accounts using the following pattern: for every new shard in a new block (power of two), the biggest shard with the highest index gets split in two by appending a 0 for the high resource shard and a 1 for the low resource shard:</p><ul id="c109087d-751a-4add-8dd1-00239f8f8024" class="bulleted-list"><li>1 shard - holds all accounts</li></ul><ul id="91861ff9-8b27-4944-a7e4-caac7576f97d" class="bulleted-list"><li>2 shards - shard #0: 0* - shard #1: 1*</li></ul><ul id="78971271-a759-4e52-a3f5-2125d2a9e6be" class="bulleted-list"><li>3 shards - 0* - 10* - 11*</li></ul><ul id="05699ed3-dc3e-4263-a2ab-c662f4e886dc" class="bulleted-list"><li>4 shards - 00* - 10* - 11* - 01*</li></ul><ul id="72991f5a-55c4-46f2-9a9b-a674f68e994b" class="bulleted-list"><li>5 shards - 00* - 10* - 11* - 010* - 011*</li></ul><ul id="de3d6f53-f680-4d7b-b7db-0c29b72e9295" class="bulleted-list"><li>6 shards - 00* - 10* - 110* - 010* - 011* - 111*</li></ul><ul id="5de34cd5-2ef7-4a80-b93b-505efa781ba3" class="bulleted-list"><li>7 shards - 00* - 100* - 110* - 010* - 011* - 111* - 101*</li></ul><ul id="81d35e34-dda2-44fc-9f77-2919eb1fd868" class="bulleted-list"><li>8 shards - 000* - 100* - 110* - 010* - 011* - 111* - 101* - 001*</li></ul><p id="848e8ec0-1955-4dd8-9187-336f20ad965e" class="">The advantage of this system is:</p><ul id="9e5e03bb-51f1-4c39-b96e-59a13f2347ba" class="bulleted-list"><li>The shard an account belongs to only depends on the number of shards</li></ul><ul id="99e480d0-e29e-4c5e-82d5-093b94a2ac9e" class="bulleted-list"><li>Adding a shard cuts the number of accounts in an existing shard by two</li></ul><ul id="21ac79b1-2bfd-42f3-9dcd-196ea1bb53b9" class="bulleted-list"><li>Removing a shard deterministically merges the accounts of that shard back in the leftmost shard that has the same number of bits in the prefix</li></ul><h1 id="8b91c002-84d8-48ea-8877-42cbd011b76b" class="">Layered Shards</h1><p id="570ef4a5-7c63-4ce4-bbc5-db36a6c5df18" class="">As described in the nodes are arranged in layers with regard to their speed (both network and CPU). This allows to have new nodes pop up in the outer layers first where their churn doesn&#x27;t influence the inner, high-performance shards.</p><p id="134c5155-83a5-4f34-aa71-e0e856b0b4b9" class="">All these shards can be written in a binary tree with the top shard being the Identity Shard:</p><h2 id="03c8b0fa-e789-4af1-8d36-b05303b92c3b" class="">Identity Shard</h2><p id="cd54f6b1-3fa6-4ac8-b418-8038e0e66631" class="">This shard is special and composed of all the nodes of the second level of the shard tree. Its purpose is to hold a directory of which nodes are currently active in the system, and how the different nodes are distributed in their level of the shard tree.</p><h2 id="cd7cbcbb-5e5b-4720-8242-1a891276075e" class="">Reward</h2><p id="fefa2e24-d9cf-49cd-bd6e-7515d6e00b4d" class="">The reward for each node participating in the consensus depends on its position in the sharding tree: the higher in the tree, the bigger reward. This must be done in such a way that it gives more reward to have one high-speed node than setting up two or more lower speed nodes.</p><p id="0e46c947-d9af-4237-af4f-546007e32010" class="">A first proposition could be that each level of the tree receives the same reward <em>in total</em>, so that the reward per shard is divided by two for each level of the tree.</p><h1 id="eb9cf5d9-1860-448e-84cf-bdd2bc6c5f3a" class="">Inter-shard communication</h1><p id="9b408a98-020b-4011-af82-f77adddf8f26" class="">Shards are used in FFledger to scale-out. The bad point of shards are:</p><ul id="0069816d-8fa3-43f0-ba78-fdb54ff148dd" class="bulleted-list"><li>difficult to communicate with accounts on other shards</li></ul><ul id="909674c9-0d71-42ee-8ef8-03c258898a98" class="bulleted-list"><li>need to avoid too many byzantine nodes in one shard</li></ul><ul id="09d02a17-af71-4286-9a5e-4066e930d957" class="bulleted-list"><li>difficult to allow churn to thwart attacks by byzantine nodes</li></ul></div></article></body></html>

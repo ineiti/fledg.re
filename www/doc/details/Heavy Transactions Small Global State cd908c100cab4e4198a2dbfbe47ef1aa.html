@@ -1,0 +1,628 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Heavy Transactions / Small Global State</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="cd908c10-0cab-4e41-98a2-dbfbe47ef1aa" class="page sans"><header><h1 class="page-title">Heavy Transactions / Small Global State</h1></header><div class="page-body"><p id="9c2ad09f-7e29-4f92-9486-98c27f93d2b0" class="">One of the reasons it takes so long to start a new node with most of the chain is that the new node has to download the whole global state of the chain. This state includes all unused accounts, old contracts that have been deleted, and very small accounts that will never be usable. FFledger uses a <em>small global state</em> to counteract this problem:</p><p id="e1554d34-beae-4170-88d5-d92207be035e" class="">Instead of holding the full state of every account or UTXO in the ledger, this information is kept by the client. If a client wants to send in a transaction, she needs to send the following:</p><ul id="076982ed-f204-45a5-8d0a-538fa0781995" class="bulleted-list"><li>The account-#</li></ul><ul id="78a12697-4f18-44b9-8a26-900121dab97f" class="bulleted-list"><li>A proof of the block of the latest transaction of the account</li></ul><ul id="9e626fe9-2dcd-4bfa-9b9b-a1ae7cde7f6e" class="bulleted-list"><li>The inclusion-proof of the account in this block</li></ul><ul id="e6c7981b-fbda-45dc-a9e3-1e8b2c63e6f8" class="bulleted-list"><li>The full memory of the account - state, smart-contract - to match the current merkle-tree root hash</li></ul><ul id="bf53fbf5-d551-48d1-9e11-fc8d22e3571b" class="bulleted-list"><li>The transaction to send to the smart contract (including the signature)</li></ul><p id="a7a24a22-607e-41e3-8d8a-bfa3514d148c" class="">All the nodes will reach consensus on the correctness of the state sent by the client and the new state, which will not be stored anywhere. The block will only have the merkle-tree root of all accounts. The inclusion-proofs of the new state can be stored in a temporary memory that can be deleted later, as they can be re-created when needed from the information in the block.</p><h2 id="5cb58b73-0620-46ca-b4cf-9ac94aa1c0fd" class="">Further reducing memory</h2><p id="228b1451-2ebc-429c-a644-5d70c442ca7c" class="">This method needs to send the proof of the latest transaction to the chain, which has the following problems:</p><ul id="c42672b9-5acd-4be7-a236-c82f43e2ce6d" class="bulleted-list"><li>memory consumption while sending a transaction and including it in a block</li></ul><ul id="516d26ea-d1c0-46d9-87e8-6b05fe4a2191" class="bulleted-list"><li>CPU consumption while verifying the signatures</li></ul><ul id="a2764138-7a65-4d13-9705-0716df35f7d4" class="bulleted-list"><li>possibility of giving a not up-to-date block by the client, thus forking the account</li></ul><p id="a1254259-91bf-4818-9c63-0627a8116e91" class="">To remove these problems, the simplest method is to create a merkle-tree of account#/account_hash and include this tree in the block header. However, now the nodes need to store quite a lot of state. Not as much as in current systems, but still a lot of potentially unused accounts.</p><p id="c77b1888-1084-475e-b7f7-87cef122a879" class="">If the account#/account_hash pairs are stored in a cockoo-filter, the memory can be reduced to around 4 bytes/account for low false positives (10^-7) and 2^32 elements. However, this means that the nodes now need to store 8GB for holding all information.</p><p id="38223773-3d87-4f02-938a-93c745403999" class=""><a href="https://github.com/AMDComputeLibraries/morton_filter">Morton filters</a> might be a better storage option by providing an efficient compression of the empty parts of the structure.</p><h2 id="25b96506-3787-4d9b-9469-51536528935a" class="">MVP</h2><p id="e6959011-7693-46cf-ae0b-76fdf423a5cc" class="">For the MVP the implementation will be to hold all account#/account_hash pairs in a merkle-tree and store the root in the block header.</p><h1 id="cf58f349-7897-432f-9dd6-b7689df017c2" class="">Accounts, FFmana and UTXOs</h1><p id="836ef463-4340-481c-92b0-ee23b689255f" class="">FFledger&#x27;s capabilities are gained through FFmana, which is used to </p><ul id="8a4160d8-e275-4e56-b894-2de4de35177e" class="bulleted-list"><li>execute wasm code</li></ul><ul id="983299c3-5480-4e35-81a2-3e03eec0f632" class="bulleted-list"><li>ask for memory caching of the account</li></ul><ul id="45684f11-0f64-47f6-ae81-a384e28c6a37" class="bulleted-list"><li>stake to participate in the library chain</li></ul><p id="634b9509-7f5f-4a66-8974-59b90775b8ef" class="">An FFmana account is a special account with a pre-defined WASM code that is stored in the nodes itself. The WASM account has the following methods:</p><ul id="d9413bd9-b1e9-45b4-82af-cb0786312aff" class="bulleted-list"><li>ingest a UTXO</li></ul><ul id="ba28d6d5-dc61-46e0-afc7-4cbd1188c4f0" class="bulleted-list"><li>put some FFmana on the stack to be used by the next operation</li></ul><ul id="78cbeba1-ada2-4234-90f9-8c5da8cd52f1" class="bulleted-list"><li>create an UTXO out of FFmana</li></ul><h1 id="a81a6791-388a-4576-a21d-2038daaf3385" class="">Inter-account communication</h1><p id="efb24ecb-4959-443d-b58f-731793041acf" class="">Examples of inter-account communication:</p><p id="49f3111c-bf8e-442d-8bba-c24971034fdf" class="">
+</p><p id="c3ba0b39-7060-4d94-b17a-743f5a7fcef1" class="">We differentiate the following calls:</p><ol id="4e526baa-7a9c-4723-84e5-4dbdc36e2a6e" class="numbered-list" start="1"><li>send tokens to another account</li></ol><ol id="516e26b3-d5d1-4c3d-aae1-1176e2e7aeb7" class="numbered-list" start="2"><li>invoke a read-method of another account</li></ol><ol id="2cfe0c25-6809-4b09-a2ff-c10c3ab4392b" class="numbered-list" start="3"><li>invoke a write-method of another account</li></ol><h2 id="aa1c99b2-fcbc-4e18-9ddc-a72602efd19f" class="">Send tokens to another account</h2><p id="f0a62c82-2925-4354-a3e6-fe8420d5ed92" class="">Probably the easiest solution is to create an UTXO that can be retrieved by the other account at any time it wants. This avoids the sender having to read the destination account and include it in the transaction.</p><h2 id="ce3ec829-0493-4236-a9e3-47043aa6a781" class="">Invoke read-method of another account</h2><p id="40838993-8175-4e59-82e7-08beae7759be" class="">Supposing that the account of the user is protected by a DARC, then the user must proof that this DARC gives access, given a public key. </p><p id="6bbf2eb2-7108-406d-ba9b-32502b230111" class="">The client can add the DARC-account to his transaction, so that the account-contract-verification can call out to the DARC-account. But this is heavy.</p><p id="1e3a6e16-0857-4afd-a0a1-759e6acc5c9b" class="">Another possibility is to create a proof that an account would return a value given a request - but then the client would need to know the other account, too.</p><h2 id="5a46511e-e8e1-4af9-9d49-1d24a421f508" class="">Invoke write-method of another account</h2><p id="99dcc29c-11b9-4180-8b24-b609d593b5ab" class="">If the client wants to invoke another account and change it&#x27;s state, then this is the same as calling a write method on the other account.</p><p id="98fc91fc-41b9-410e-a220-814efd8c3d80" class="">The client can again send the other account along with his primary account in the transaction. But then the new account is changed, and the original holder of that account would need to update it. Which is probably what needs to be done anyway.</p><p id="335fb913-a51e-4436-9d54-8fb07086deb2" class="">Another possibility is to create an UTXO with the write request going to that account, and then somebody else could apply this to the account.</p></div></article></body></html>

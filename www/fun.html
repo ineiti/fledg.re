@@ -2,12 +2,34 @@
 <html>
 <head>
   <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="fun.css">
   <script src="fun.js"></script>
 </head>
-<body bgcolor="#2e0c22">
+<body>
   <div id="agreement">
-    <div id="participate">Participate in the fun</div>
-    <div id="bystander">Only look from the outside</div>
+    <div class="space"></div>
+    <div id="participate" class="column" onclick="document.location='app/index.html'">
+      <h1>Participate in the fun</h1>
+      <p>Start the first steps with Fledger.
+        Work in progres...</p>
+      <!-- <p>This means that the website will store some data locally in your
+        browser, most importantly a new private key.
+        Then the browser will start participating in the consensus, and after
+        some time (~1 minute) you will receive your first mana!</p> -->
+    </div>
+    <div class="space"></div>
+    <div class="space"></div>
+    <div id="bystander" class="column" onclick="document.location='doc/index.html'">
+      <h1>Read the docs</h1>
+      <p>Understand what Fledger wants to achieve.
+        Then you'll understand what it doesn't want to achieve...</p>
+      <!-- <p>Your privacy will be respected, and nothing will be stored in
+        your browser.
+        Only the bottom part of your browser window will show the current
+        state of the network.
+        Of course you can always click on "Participate" to join the fun!</p> -->
+    </div>
+    <div class="space"></div>
   </div>
   <div id="doc" class="hidden"></div>
   <div id="fledger" class="hidden"></div>
