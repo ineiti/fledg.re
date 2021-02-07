@@ -3,8 +3,8 @@ window.onload = function(){
   inner = document.getElementById('inner').style;
   quit = document.getElementById('quit').style;
   setTimeout(()=>{
-    // link_quit(5);
-  }, 1000);
+    // link_quit(2);
+  }, 000);
 }
 
 function get_elements(){

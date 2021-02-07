@@ -16,6 +16,12 @@ h1 {
   position: absolute;
   width: 100%;
   text-align: center;
+}
+
+.text1middle {
+  position: absolute;
+  width: 100%;
+  text-align: center;
   margin-top: 50%;
 }
 
