@@ -59,7 +59,7 @@
   background:
         radial-gradient(circle,
           #FFC300aa,
-          #FFC30000 70.71%);
+          #FFC30000 40.71%);
   animation-name: rotate, pos2;
 }
 
@@ -67,7 +67,7 @@
   background:
         radial-gradient(circle,
           #FF5733aa,
-          #FF573300 70.71%);
+          #FF573300 40.71%);
   animation-name: rotate, pos3;
 }
 
@@ -75,7 +75,7 @@
   background:
         radial-gradient(circle,
           #C70039aa,
-          #C7003900 70.71%);
+          #C7003900 40.71%);
   animation-name: rotate, pos4;
 }
 
@@ -83,7 +83,7 @@
   background:
         radial-gradient(circle,
           #900C3Faa,
-          #900C3F00 70.71%);
+          #900C3F00 40.71%);
   animation-name: rotate, pos5;
 }
 
