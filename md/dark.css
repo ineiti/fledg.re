@@ -1,8 +1,15 @@
-html[data-theme='dark'] {
-    background: #000;
-    filter: invert(1) hue-rotate(180deg)
+details > div {
+  margin-left: 1.5em;
+  margin-top: 0.5em;
 }
 
-html[data-theme='dark'] img {
-  filter: invert(1) hue-rotate(180deg)
+@media (prefers-color-scheme: dark) {
+  html {
+      background: #333;
+      filter: invert(1) hue-rotate(180deg)
+  }
+
+  /* html img {
+    filter: invert(1) hue-rotate(180deg)
+  } */
 }
