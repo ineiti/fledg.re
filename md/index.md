@@ -1,14 +1,26 @@
+title: Fledger
+---
 
 # Fledger
 
-Fast, Fun, Forgetful Ledger, or Fledger puts the fun back in blockchain!
+<div style="margin: auto; width: 80%;">
+<img src="blockchain.svg" style="width: 10em; float:left; margin: 2em;"/>
+
+<div style="padding: 70px 0;">
+Fast, Fun, Forgetful Ledger, or Fledger puts the <strong>FUN</strong> back in blockchain!
+
+TLDR: Try out the networking layer at https://web.fledg.re !
+</div>
+</div>
+
+<br clear="left">
 
 ## Principles
 
 <details>
-<summary>Bring back the fun - remember when bitcoin was there to change the world?</summary>
+<summary><strong>Bring back the fun</strong> - remember when bitcoin was there to change the world?</summary>
 
-<div style="margin-left: 1em;">
+<div>
 I remember the first announcement of bitcoin on slashdot - and will be forever sad I didn't install it on my computer ;) But the basic idea of politically decentralizing decisions is great and brings back the fun of the internet.
 
 Do you remember building your first webpage? Sending your first email? Installing your first webserver?
@@ -19,9 +31,9 @@ Learn how blockchains work, and what you can do with them.
 </details>
 
 <details>
-<summary>Easy setup - no need to configure your node or your own network - just start the docker</summary>
+<summary><strong>Easy setup</strong> - no need to configure your node or your own network - just start the docker</summary>
 
-<div style="margin-left: 1em;">
+<div>
 For most of the blockchains out there it is very complicated to run a node and to actually use it. Ethereum needs you to wait a couple of days for a full node to be ready. Bitcoin will never allow you to mine a block (within reasonable assumptions of probability, anyway). Avalanche needs you to set up your own blockchain and pay 2500US$ to stake enough tokens.
 
 Fledger only asks you one of two things thing:
@@ -40,9 +52,9 @@ No port-opening needed, no TLS setup, no downloading a lot of data - just start 
 </details>
 
 <details>
-<summary>Fast rewards - once your node is running, get direct (small) rewards within minutes</summary>
+<summary><strong>Fast rewards</strong> - once your node is running, get direct (small) rewards within minutes</summary>
 
-<div style="margin-left: 1em;">
+<div>
 Ever wanted to use Ethereum? You either need to buy ether, which is very expensive, or use the test-net, which is only half fun. For bitcoin it's even worse.
 
 The goal of Fledger is to make participation easy. If you run your own node, you are guaranteed that within
@@ -51,9 +63,9 @@ The goal of Fledger is to make participation easy. If you run your own node, you
 </details>
 
 <details>
-<summary>Actually useful - sell and buy memory, HD, CPU, network bandwidth</summary>
+<summary><strong>Actually useful</strong> - offer and use memory, HD, CPU, network bandwidth</summary>
 
-<div style="margin-left: 1em;">
+<div>
 Ever tried to do a project on Ethereum? It's too expensive to do anything useful. Except for crypto kitties, of course.
 
 Other blockchain projects, like filecoin, set up a huge environment to serve files. But there are other assets, too. The goal of Fledger is to allow each node to easily share
@@ -66,16 +78,15 @@ Other blockchain projects, like filecoin, set up a huge environment to serve fil
 And to earn Mana in doing so, which can be used in turn to buy necessary resources.
 </div>
 </details>
-<br>
 
 ## Technological
 
 From a technological point of view, use the following goodies described by the Chainiac, Byzcoin, and OmniLedger papers:
 
 <details>
-<summary>Every block is final - by using a fast BFT algorithm, no forks can happen</summary>
+<summary><strong>Every block is final</strong> - by using a fast BFT algorithm, no forks can happen</summary>
 
-<div style="margin-left: 1em;">
+<div>
 The [ByzCoin paper](https://actu.epfl.ch/news/byzcoin-an-innovative-solution/) proposed a new method to improve the speed of 
 transactions in Bitcoin: instead of having all the nodes compete to be the leader, once a leader is chosen, it takes the n 
 latest leaders to create micro blocks that are signed by all leaders. This means that during the micro block creation no forks 
@@ -91,9 +102,9 @@ has been proposed in OmniLedger as a fast and secure way to sign new blocks.
 </details>
 
 <details>
-<summary>Multi-level ForwardLinks - small proofs: no need to look at all block headers to confirm a transaction</summary>
+<summary><strong>Multi-level ForwardLinks</strong> - small proofs: no need to look at all block headers to confirm a transaction</summary>
 
-<div style="margin-left: 1em;">
+<div>
 If a block with index _n_ is created in current blockchains, it includes a hash of the header of block _n-1_.
 This is the basis of the blockchain.
 The problem with this solution is that to have a proof of the correctness of a block, you need all block headers, recalculate 
@@ -120,9 +131,9 @@ by the DEDIS-lab and allows to reduce the proof of the latest block in a chain w
 </details>
 
 <details>
-<summary>Sharding - cut the processing power of the nodes in little units so that more nodes means more speed</summary>
+<summary><strong>Sharding</strong> - cut the processing power of the nodes in little units so that more nodes means more speed</summary>
 
-<div style="margin-left: 1em;">
+<div>
 One of the best known technique to scale-out a blockchain systems is to create shards.
 This means to take the whole set of available nodes, and group them together.
 Each group, or shard, works independently of all others, and can increase throughput.
@@ -136,7 +147,6 @@ It gives the probability of an attacker being able to create a faulty shard, giv
 total number of nodes.
 </div>
 </details>
-<br>
 
 ## Engineering Technology
 
@@ -144,9 +154,9 @@ The following elements are purely engineering stuff, and hopefully not too bad o
 If you're a PhD student and want to work on these ideas, feel free to get in contact with me ;)
 
 <details>
-<summary>Adaptable difficulty - let slow nodes participate in the network</summary>
+<summary><strong>Adaptable difficulty</strong> - let slow nodes participate in the network</summary>
 
-<div style="margin-left: 1em;">
+<div>
 Fledger does not suppose that all nodes are equal.
 Some nodes will run in web browsers and are limited in speed and memory availble.
 Other nodes will run on a 24/7 available server and will be much faster.
@@ -164,9 +174,9 @@ will be banned - or at least their Mana will be removed.
 </details>
 
 <details>
-<summary>Proof of Useful Work</summary>
+<summary><strong>Proof of Useful Work</strong> - prove you're a useful node by validating other transactions</summary>
 
-<div style="margin-left: 1em;">
+<div>
 This is most arguably one of the weak points of Fledger:
 I don't want to use Proof-of-Work, as it's wasteful.
 Proof-of-Stake sounds complicated if you want nodes to be able to sign up without financial participation.
@@ -200,9 +210,9 @@ Of course there are a lot of problems with this approach:
 </details>
 
 <details>
-<summary>Heavy Transaction / Small Global State - instead of having a huge global state, the client needs to keep track of its own memory</summary>
+<summary><strong>Heavy Transaction / Small Global State</strong> - instead of having a huge global state, the client needs to keep track of its own memory</summary>
 
-<div style="margin-left: 1em;">
+<div>
 One of the reasons it takes so long to start a new node with most of the chain is that the new node has to download the whole global state of the chain. This state includes all unused accounts, old contracts that have been deleted, and very small accounts that will never be usable. FFledger uses a small global state to counteract this problem:
 
 Instead of holding the full state of every account or UTXO in the ledger, this information is kept by the client. If a client wants to send in a transaction, she needs to send the following:
@@ -222,9 +232,9 @@ stored in a temporary memory that can be deleted later, as they can be re-create
 </details>
 
 <details>
-<summary>Forgetting stuff over time</summary>
+<summary><strong>Forgetting</strong> stuff over time</summary>
 
-<div style="margin-left: 1em;">
+<div>
 Some say that forgetting is one of the main features of the human brain. The possibility to sort memories according to their importance. Others say that our mind does an awful job at this, and forgets what it shouldn't.
 
 Current blockchains keep the state of everything around, for all time. Even though there are some checkpoint features that allow to prune old UTXOs. Fledger proposes to allow forgetting of accounts / UTXOs in multiple steps, by requiring mana for holding the information. The following parts can be chosen by the user:
@@ -235,33 +245,37 @@ Current blockchains keep the state of everything around, for all time. Even thou
   * High storage: 
 </div>
 </details>
-<br>
 
 ## Fledger is NOT
 
 <details>
-<summary>DeFi related - the goal of Fledger is not to allow financial transactions fast and securely</summary>
+<summary><strong>DeFi related</strong> - the goal of Fledger is not to allow financial transactions fast and securely</summary>
 
-<div style="margin-left: 1em;">
+<div>
 Win and lose money fast, without the protection of the state - not our goal.
 </div>
 </details>
 
 <details>
-<summary>an investment product - Mana will be sold at a stable price for those wanting to profit from the resources of the network</summary>
+<summary><strong>an investment product</strong> - Mana will be sold at a stable price for those wanting to profit from the resources of the network</summary>
 
-<div style="margin-left: 1em;">
+<div>
 No HODL - please use it!
 </div>
 </details>
-<br>
 
-## More caveats
+## Caveats
 
 1. The author of Fledger dreams of working only on this project - so he allows himself to influence the Mana economy by selling them at a fixed price to pay the development of Fledger
 2. The standard distribution of Fledger always includes at least one node of the main developer in the top shard
 
-# Is Fledger for you?
+
+
+# Participating
+
+If you wish to participate, here some more information:
+
+## Is Fledger for you?
 In its current state, Fledger is for you if you:
 
 * love trying out new stuff
@@ -269,7 +283,7 @@ In its current state, Fledger is for you if you:
 * want to bring out the anarchist in you - but still want consensus on some issues
 * have a running server connected 24/7 on the internet or are ready to let your browser do some work
 
-# Minimum Viable Product
+## Minimum Viable Product
 
 The minimum viable product allows nodes to publish a static webpage and let it run on the network.
 The roadmap to do this is the following:
@@ -282,7 +296,6 @@ The roadmap to do this is the following:
 
 ETA - End of 2021? Very ambitious. Please join ;)
 
-# Links / Notepad
-Things to consider:
+## Participate
 
-* wasm interpreter with gas indication: https://github.com/perlin-network/life
+Go to https://github.com/ineiti/fledger and participate in an issue, or create a PR.

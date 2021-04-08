@@ -2,13 +2,19 @@ name: DEPLOY
 on:
   push:
     branches:
-    - master
+    - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
+    - name: Convert to html
+      run: |
+        npx generate-md --layout $LAYOUT --input ./md --output ./www/doc
+        cat md/dark.css >> www/doc/assets/css/style.css
+
     - name: rsync deployments
       uses: burnett01/rsync-deployments@4.1
       with:
