@@ -12,14 +12,13 @@ jobs:
 
     - name: Convert to html
       run: |
-        npm i generate-md
-        npx generate-md --layout $LAYOUT --input ./md --output ./www/doc
+        npx -p markdown-styles generate-md --layout witex --input ./md --output ./www/doc
         cat md/dark.css >> www/doc/assets/css/style.css
 
     - name: rsync deployments
       uses: burnett01/rsync-deployments@4.1
       with:
-        switches: -avzrO --delete
+        switches: -vzrO --delete
         path: www/
         remote_path: /home/hosting/data/sites/fledg.re
         remote_host: fledg.re
